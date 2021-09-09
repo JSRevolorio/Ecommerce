@@ -20,7 +20,7 @@ namespace Ecommerce_proyect.Views
         public decimal PrecioSinIva { get; set; }
         [Required]
         public int? IdCategoria { get; set; }
-        [Required]
+
         public string CategoriaTipo { get; set; }
         [Required]
         public string LinkImagen { get; set; }

@@ -6,14 +6,10 @@ using System.Threading.Tasks;
 
 namespace Ecommerce_proyect.Views
 {
-    public class CompraView
+    public class CompraPresentacionView
     {
-        public CompraView()
-        {
-            compraDetalles = new List<CompraDetalleView>();
-        }
-
         public int Id { get; set; }
+
 
         [Required]
         public DateTime? Fecha { get; set; }
@@ -22,15 +18,12 @@ namespace Ecommerce_proyect.Views
         public string NumeroFactura { get; set; }
 
         [Required]
-        public int? IdProveedor { get; set; }
+        public string NombreProveedor { get; set; }
 
         [Required]
-        public int? IdEmpleado { get; set; }
+        public string NombreEmpleado { get; set; }
 
         [Required]
-        public decimal TotalConIva { get; set; }
-
-        [Required]
-        public List<CompraDetalleView> compraDetalles { get; set; }
+        public decimal Total { get; set; }
     }
 }

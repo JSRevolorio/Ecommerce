@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce_proyect.Models
 {
+    [Table("Categoria")]
     public partial class Categoria
     {
         public Categoria()

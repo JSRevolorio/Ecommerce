@@ -27,15 +27,15 @@ namespace Ecommerce.Controllers
         {
             try
             {
-                var empleados = context.Empleados.Include(empleado => empleado.EmpleadoRols).ToList();
+                var empleados = context.Empleados.Include(empleado => empleado.EmpleadoRols).ThenInclude(empleadoRol => empleadoRol.Rols).ToList();
 
                 List<EmpleadoView> empleadoViews = new List<EmpleadoView>();
-
+                
                 empleados.ForEach(empleado => 
                 {
                     empleado.EmpleadoRols.ToList().ForEach(empleadoRol => 
                     {
-
+                
                         empleadoViews.Add(new EmpleadoView()
                         {
                             Id        = empleado.Id,
@@ -65,7 +65,7 @@ namespace Ecommerce.Controllers
         {
             try
             {
-                var empleado = context.Empleados.Include(empleado => empleado.EmpleadoRols).Where(empleado => empleado.Id == id).FirstOrDefault();
+                var empleado = context.Empleados.Include(empleado => empleado.EmpleadoRols).ThenInclude(empleadoRol => empleadoRol.Rols).Where(empleado => empleado.Id == id).FirstOrDefault();
 
                 if (empleado != null)
                 {

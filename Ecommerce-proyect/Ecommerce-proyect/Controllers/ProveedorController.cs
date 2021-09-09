@@ -34,11 +34,11 @@ namespace Ecommerce_proyect.Controllers
                 {
                     proveedorViews.Add(new ProveedorView()
                     {
-                        Id = proveedor.Id,
-                        Nombre = proveedor.Nombre,
-                        Telefono = proveedor.Telefono,
+                        Id        = proveedor.Id,
+                        Nombre    = proveedor.Nombre,
+                        Telefono  = proveedor.Telefono,
                         Direccion = proveedor.Direccion,
-                        Correo = proveedor.Correo
+                        Correo    = proveedor.Correo
                     });
                 });
 
@@ -61,11 +61,11 @@ namespace Ecommerce_proyect.Controllers
                 {
                     var proveedorView = new ProveedorView()
                     {
-                        Id = proveedor.Id,
-                        Nombre = proveedor.Nombre,
-                        Telefono = proveedor.Telefono,
+                        Id        = proveedor.Id,
+                        Nombre    = proveedor.Nombre,
+                        Telefono  = proveedor.Telefono,
                         Direccion = proveedor.Direccion,
-                        Correo = proveedor.Correo
+                        Correo    = proveedor.Correo
                     };
 
                     return StatusCode((int)HttpStatusCode.OK, proveedorView);

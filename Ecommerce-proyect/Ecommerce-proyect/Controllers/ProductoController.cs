@@ -62,7 +62,7 @@ namespace Ecommerce.Controllers
         {
             try
             {
-                var producto = context.Productos.Find(id);
+                var producto = context.Productos.Include(producto => producto.Categorias).Where(producto => producto.Id == id).FirstOrDefault();
 
                 if (producto != null)
                 {
@@ -99,7 +99,6 @@ namespace Ecommerce.Controllers
             {
                 var producto = new Producto()
                 {
-                    Id                  = productoView.Id,
                     Nombre              = productoView.Nombre,
                     Descripcion         = productoView.Descripcion,
                     PrecioConIva        = productoView.PrecioConIva,
@@ -127,7 +126,7 @@ namespace Ecommerce.Controllers
         }
 
         [HttpPut]
-        public IActionResult ModifyProveedor([FromBody] ProductoView productoView)
+        public IActionResult ModifyProducto([FromBody] ProductoView productoView)
         {
             try
             {
@@ -163,7 +162,7 @@ namespace Ecommerce.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteProveedor([FromRoute] int id)
+        public IActionResult DeleteProducto([FromRoute] int id)
         {
             try
             {

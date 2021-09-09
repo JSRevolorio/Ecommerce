@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce_proyect.Models
 {
+    [Table("Tienda")]
     public partial class Tienda
     {
         public Tienda()

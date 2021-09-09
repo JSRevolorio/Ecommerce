@@ -45,7 +45,7 @@ namespace Ecommerce_proyect.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { mensaje = ex.Message });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { mensaje = ex });
             }
         }
 
@@ -60,9 +60,9 @@ namespace Ecommerce_proyect.Controllers
                 {
                     var categoriaView = new CategoriaView()
                     {
-                        Id = categoria.Id,
-                        Tipo = categoria.Tipo,
-                        Marca = categoria.Marca,
+                        Id     = categoria.Id,
+                        Tipo   = categoria.Tipo,
+                        Marca  = categoria.Marca,
                         Modelo = categoria.Modelo
                     };
 
@@ -86,7 +86,6 @@ namespace Ecommerce_proyect.Controllers
             {
                 var categoria = new Categoria()
                 {
-                    Id     = CategoriaView.Id,
                     Tipo   = CategoriaView.Tipo,
                     Marca  = CategoriaView.Marca,
                     Modelo = CategoriaView.Modelo
@@ -114,7 +113,6 @@ namespace Ecommerce_proyect.Controllers
 
                 if (categoria != null)
                 {
-                    categoria.Id     = CategoriaView.Id;
                     categoria.Tipo   = CategoriaView.Tipo;
                     categoria.Marca  = CategoriaView.Marca;
                     categoria.Modelo = CategoriaView.Modelo;

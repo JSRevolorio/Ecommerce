@@ -32,7 +32,7 @@ namespace Ecommerce_proyect.Models
         public decimal PrecioSinIva { get; set; }
         public int? IdCategoria { get; set; }
         [Required]
-        [StringLength(30)]
+        [StringLength(100)]
         public string Imagen { get; set; }
         public int Garantia { get; set; }
         public int? PorcentajeDescuento { get; set; }
