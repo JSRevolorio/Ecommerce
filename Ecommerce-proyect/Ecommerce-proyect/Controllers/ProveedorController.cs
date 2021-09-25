@@ -34,6 +34,7 @@ namespace Ecommerce_proyect.Controllers
                 {
                     proveedorViews.Add(new ProveedorView()
                     {
+
                         Id        = proveedor.Id,
                         Nombre    = proveedor.Nombre,
                         Telefono  = proveedor.Telefono,

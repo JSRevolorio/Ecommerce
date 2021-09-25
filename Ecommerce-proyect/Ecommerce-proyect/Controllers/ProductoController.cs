@@ -30,7 +30,6 @@ namespace Ecommerce.Controllers
             {
                 var productos = context.Productos.Include(producto => producto.Categorias).Where(producto => producto.Estado == 1).ToList();
 
-
                 List<ProductoView> productoViews = new List<ProductoView>();
 
                 productos.ForEach(producto =>

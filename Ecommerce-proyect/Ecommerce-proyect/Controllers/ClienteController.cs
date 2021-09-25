@@ -35,17 +35,17 @@ namespace Ecommerce_proyect.Controllers
                 {
                     clienteViews.Add(new ClienteView()
                     {
-                        Id = cliente.Id,
-                        Nombre = cliente.Nombre,
-                        Apellido = cliente.Apellido,
-                        Telefono = cliente.Telefono,
-                        Correo = cliente.Correo,
-                        Direccion = cliente.Direccion,
-                        Nit = cliente.Nit,
-                        Usuario = cliente.Usuario,
-                        Contraseña = cliente.Contraseña,
+                        Id            = cliente.Id,
+                        Nombre        = cliente.Nombre,
+                        Apellido      = cliente.Apellido,
+                        Telefono      = cliente.Telefono,
+                        Correo        = cliente.Correo,
+                        Direccion     = cliente.Direccion,
+                        Nit           = cliente.Nit,
+                        Usuario       = cliente.Usuario,
+                        Contraseña    = cliente.Contraseña,
                         IdTipoCliente = cliente.IdTipoCliente,
-                        ClienteTipo = cliente.IdTipoClienteNavigation.Tipo
+                        ClienteTipo   = cliente.IdTipoClienteNavigation.Tipo
 
                     });
                 });
