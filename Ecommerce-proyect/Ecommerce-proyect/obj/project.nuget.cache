@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Pw+xiZ7gNLcIOUSNCedpNbHpXbwbsJVVigze3JlMcfpRHcl8Zbb+X6+RvSUAagPbCg/3znwjYb0CWqVrfJ4qkQ==",
+  "dgSpecHash": "xNgoKjtRGaeVYihmVES8gZAoy/D56OOuE7Ncx3fUUV/+IWdGPfvcNx4dqfxUC0q7s7Gye2Coyv7xt043pPBkAg==",
   "success": true,
   "projectFilePath": "C:\\Users\\josue\\Documents\\Ecommerce\\Ecommerce-proyect\\Ecommerce-proyect\\Ecommerce-proyect.csproj",
   "expectedPackageFiles": [
@@ -100,7 +100,8 @@
     "C:\\Users\\josue\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
     "C:\\Users\\josue\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
     "C:\\Users\\josue\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
-    "C:\\Users\\josue\\.nuget\\packages\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512"
+    "C:\\Users\\josue\\.nuget\\packages\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512",
+    "C:\\Users\\josue\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\3.1.18\\microsoft.netcore.app.host.win-x64.3.1.18.nupkg.sha512"
   ],
   "logs": []
 }
