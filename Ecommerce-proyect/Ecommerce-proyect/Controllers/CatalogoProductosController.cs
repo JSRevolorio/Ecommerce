@@ -28,20 +28,38 @@ namespace Ecommerce_proyect.Controllers
             try
             {
 
-                var catalogoP = context.Productos.Where(producto => producto.Estado == 1).Take(30).ToList();
+
+                var catalogoP = (from producto in context.Productos
+                                 join inventario in context.Inventarios on producto.Id equals inventario.IdProducto
+                                 where
+inventario.Cantidad > 0 && producto.Estado == 1
+                                 select new
+                                 {
+                                     producto.Id,
+                                     producto.Nombre,
+                                     producto.Descripcion,
+                                     producto.PrecioConIva,
+                                     producto.Imagen,
+                                     inventario.Cantidad,
+                                 }).ToList();
 
 
                 List<CatalogoProductosView> catalogoProductosViews = new List<CatalogoProductosView>();
 
+
+
+
+
                 catalogoP.ForEach(catalogo =>
                 {
+
                     catalogoProductosViews.Add(new CatalogoProductosView()
                     {
-                        Id            = catalogo.Id,
-                        Nombre        = catalogo.Nombre,
-                        Descripcion   = catalogo.Descripcion,
-                        PrecioConIva  = catalogo.PrecioConIva,
-                        LinkImagen    = catalogo.Imagen
+                        Id = catalogo.Id,
+                        Nombre = catalogo.Nombre,
+                        Descripcion = catalogo.Descripcion,
+                        PrecioConIva = catalogo.PrecioConIva,
+                        LinkImagen = catalogo.Imagen
                     });
                 });
 
@@ -60,21 +78,36 @@ namespace Ecommerce_proyect.Controllers
         {
             try
             {
-                var catalogoBusqueda = context.Productos.Include(producto => producto.Categorias).Where(producto => producto.Categorias.Marca == search && producto.Estado == 1 || producto.Categorias.Tipo == search && producto.Estado == 1 || producto.Categorias.Modelo == search && producto.Estado == 1).ToList();
+
+                var catalogoBusqueda = (from producto in context.Productos
+                                 join inventario in context.Inventarios on producto.Id equals inventario.IdProducto
+                                 where inventario.Cantidad > 0 && producto.Estado == 1 && producto.Categorias.Marca == search ||
+                                 inventario.Cantidad > 0 && producto.Estado == 1 && producto.Categorias.Modelo == search ||
+                                 inventario.Cantidad > 0 && producto.Estado == 1 && producto.Categorias.Tipo == search
+                                 select new
+                                 {
+                                     producto.Id,
+                                     producto.Nombre,
+                                     producto.Descripcion,
+                                     producto.PrecioConIva,
+                                     producto.Imagen,
+                                     inventario.Cantidad,
+                                 }).ToList();
+
 
                 List<CatalogoProductosView> catalogoProductosViews = new List<CatalogoProductosView>();
 
-               if( catalogoBusqueda.Count != 0)
+                if (catalogoBusqueda.Count != 0)
                 {
                     catalogoBusqueda.ForEach(productoBusqueda =>
                     {
                         catalogoProductosViews.Add(new CatalogoProductosView()
                         {
-                            Id              = productoBusqueda.Id,
-                            Nombre          = productoBusqueda.Nombre,
-                            Descripcion     = productoBusqueda.Descripcion,
-                            PrecioConIva    = productoBusqueda.PrecioConIva,
-                            LinkImagen      = productoBusqueda.Imagen
+                            Id = productoBusqueda.Id,
+                            Nombre = productoBusqueda.Nombre,
+                            Descripcion = productoBusqueda.Descripcion,
+                            PrecioConIva = productoBusqueda.PrecioConIva,
+                            LinkImagen = productoBusqueda.Imagen
                         });
 
                     });
