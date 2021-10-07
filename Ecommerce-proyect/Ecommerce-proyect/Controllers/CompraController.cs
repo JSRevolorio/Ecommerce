@@ -31,19 +31,19 @@ namespace Ecommerce_proyect.Controllers
 
                 List<CompraPresentacionView> compraPresentacionViews = new List<CompraPresentacionView>();
 
-                compras.ForEach(compra => 
+                compras.ForEach(compra =>
                 {
                     var proveedor = context.Proveedors.Find(compra.IdProveedor);
-                    var empleado  = context.Empleados.Find(compra.IdEmpleado);
+                    var empleado = context.Empleados.Find(compra.IdEmpleado);
 
-                    compraPresentacionViews.Add(new CompraPresentacionView() 
-                    { 
-                        Id              = compra.Id,
-                        Fecha           = compra.Fecha,
-                        NumeroFactura   = compra.NumeroFactura,
+                    compraPresentacionViews.Add(new CompraPresentacionView()
+                    {
+                        Id = compra.Id,
+                        Fecha = compra.Fecha,
+                        NumeroFactura = compra.NumeroFactura,
                         NombreProveedor = proveedor.Nombre,
-                        NombreEmpleado  = empleado.Nombre,
-                        Total           = compra.TotalConIva
+                        NombreEmpleado = empleado.Nombre,
+                        Total = compra.TotalConIva
                     });
 
                 });
@@ -56,6 +56,7 @@ namespace Ecommerce_proyect.Controllers
             }
         }
 
+
         [HttpPost]
         public IActionResult CreateCompra([FromBody] CompraView compraView)
         {
@@ -66,12 +67,12 @@ namespace Ecommerce_proyect.Controllers
                 {
                     Compra compra = new Compra()
                     {
-                        Fecha         = compraView.Fecha,
+                        Fecha = compraView.Fecha,
                         NumeroFactura = compraView.NumeroFactura,
-                        IdProveedor   = compraView.IdProveedor,
-                        IdEmpleado    = compraView.IdEmpleado,
-                        TotalConIva   = compraView.TotalConIva,
-                        Estado        = 1
+                        IdProveedor = compraView.IdProveedor,
+                        IdEmpleado = compraView.IdEmpleado,
+                        TotalConIva = compraView.TotalConIva,
+                        Estado = 1
                     };
 
                     context.Compras.Add(compra);
@@ -79,15 +80,15 @@ namespace Ecommerce_proyect.Controllers
 
                     compraView.Id = compra.Id;
 
-                    compraView.compraDetalles.ForEach(compraDetalleView => 
+                    compraView.compraDetalles.ForEach(compraDetalleView =>
                     {
                         DetalleCompra detalleCompra = new DetalleCompra()
                         {
-                            IdCompra           = compra.Id,
-                            IdProducto         = compraDetalleView.IdProducto,
+                            IdCompra = compra.Id,
+                            IdProducto = compraDetalleView.IdProducto,
                             PrecioUnidadSinIva = compraDetalleView.PrecioUnidadSinIva,
                             PrecioUnidadConIva = compraDetalleView.PrecioUnidadConIva,
-                            Cantidad           = compraDetalleView.Cantidad
+                            Cantidad = compraDetalleView.Cantidad
                         };
 
                         context.DetalleCompras.Add(detalleCompra);
@@ -99,16 +100,16 @@ namespace Ecommerce_proyect.Controllers
                         var producto = context.Productos.Find(compraDetalleView.IdProducto);
                         var cantidadProductoInventario = context.Inventarios.Where(inventario => inventario.IdProducto == producto.Id).Sum(p => p.Cantidad);
 
-                        var precioTotalIva = ((detalleCompra.PrecioUnidadConIva * detalleCompra.Cantidad) + (producto.PrecioConIva * cantidadProductoInventario))/(cantidadProductoInventario + detalleCompra.Cantidad);
-                        var precioTotalSinIva =  (precioTotalIva) - (precioTotalIva * iva);
+                        var precioTotalIva = ((detalleCompra.PrecioUnidadConIva * detalleCompra.Cantidad) + (producto.PrecioConIva * cantidadProductoInventario)) / (cantidadProductoInventario + detalleCompra.Cantidad);
+                        var precioTotalSinIva = (precioTotalIva) - (precioTotalIva * iva);
 
 
                         Inventario inventario = new Inventario()
                         {
-                            IdProducto  = compraDetalleView.IdProducto,
-                            IdTienda    =  1,
+                            IdProducto = compraDetalleView.IdProducto,
+                            IdTienda = 1,
                             IdProveedor = compra.IdProveedor,
-                            Cantidad    = compraDetalleView.Cantidad
+                            Cantidad = compraDetalleView.Cantidad
                         };
 
                         context.Inventarios.Add(inventario);
@@ -123,7 +124,7 @@ namespace Ecommerce_proyect.Controllers
 
                     });
                 }
-                else 
+                else
                 {
                     return StatusCode((int)HttpStatusCode.NotFound, new { mensaje = "El detalle de la compra no puede estar vacio" });
                 }
@@ -135,5 +136,57 @@ namespace Ecommerce_proyect.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { mensaje = ex.Message });
             }
         }
+
+        [HttpGet("FechaInicio={FechaInicio}&FechaFinal={FechaFinal}")]
+        public IActionResult GetCompraPorFecha([FromRoute] DateTime FechaInicio, DateTime FechaFinal)
+        {
+            try
+            {
+
+
+                var compras = context.Compras.Include(compra => compra.DetalleCompras).Where(fechas => fechas.Fecha >= FechaInicio && fechas.Fecha <= FechaFinal).ToList();
+
+
+                List<CompraPresentacionView> compraPresentacionViews = new List<CompraPresentacionView>();
+
+                compras.ForEach(compra =>
+                {
+                    var proveedor = context.Proveedors.Find(compra.IdProveedor);
+                    var empleado = context.Empleados.Find(compra.IdEmpleado);
+
+                    compraPresentacionViews.Add(new CompraPresentacionView()
+                    {
+                        Id = compra.Id,
+                        Fecha = compra.Fecha,
+                        NumeroFactura = compra.NumeroFactura,
+                        NombreProveedor = proveedor.Nombre,
+                        NombreEmpleado = empleado.Nombre,
+                        Total = compra.TotalConIva
+                    });
+
+                });
+
+                return StatusCode((int)HttpStatusCode.OK, compraPresentacionViews);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { mensaje = ex.Message });
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

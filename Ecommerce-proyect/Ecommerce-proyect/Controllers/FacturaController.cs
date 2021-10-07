@@ -90,12 +90,6 @@ namespace Ecommerce_proyect.Controllers
         {
             try
             {
-                //    DetalleFacturaView detalleFacturaView = new DetalleFacturaView();
-                //    var producto = context.Productos.Find(detalleFacturaView.IdProducto);
-                //    var cantidadProductoInventario = context.Inventarios.Where(inventario => inventario.IdProducto == producto.Id).Select(canti => canti.Cantidad);
-                //    var cantidadProductosAFacturar = facturaView.facturaDetalles.Where(producto => producto.IdProducto == ;
-
-
 
                 if (facturaView.facturaDetalles.Count > 0)
                 {
@@ -178,6 +172,72 @@ namespace Ecommerce_proyect.Controllers
             }
 
         }
+
+
+        [HttpGet("FechaInicio={FechaInicio}&FechaFinal={FechaFinal}")]
+        public IActionResult GetFacturaPorFecha([FromRoute] DateTime FechaInicio, DateTime FechaFinal)
+        {
+            try
+            {
+                var facturas = context.Facturas.Include(factura => factura.FacturaPagos).ThenInclude(pagos => pagos.IdMetodoPagoNavigation).Include(factuDe => factuDe.DetalleFacturas).Include(factura => factura.IdClienteNavigation).Include(factura => factura.IdEmpleadoNavigation).Where(fechas => fechas.Fecha >= FechaInicio && fechas.Fecha <= FechaFinal);
+
+
+                List<FacturaPresentacionView> facturaPresentacionViews = new List<FacturaPresentacionView>();
+
+                facturas.ToList().ForEach(factura =>
+                {
+
+                    var cliente = context.Clientes.Find(factura.IdCliente);
+                    var tienda = context.Tiendas.Find(factura.IdTienda);
+                    var empleado = context.Empleados.Find(factura.IdEmpleado);
+                    var monto = factura.FacturaPagos.Select(metodo => metodo.Monto).Sum();
+                    var productos = context.DetalleFacturas.Where(productos => productos.IdFactura == factura.Id).ToList();
+
+
+                    List<DetalleFacturaView> detalleFacturaViews = new List<DetalleFacturaView>();
+
+                    productos.ForEach(pro =>
+                    {
+                        detalleFacturaViews.Add(new DetalleFacturaView()
+                        {
+                            IdProducto = pro.IdProducto,
+                            Cantidad = pro.Cantidad,
+                            PrecioConIva = pro.PrecioConIva,
+
+                        });
+
+                    });
+
+                    facturaPresentacionViews.Add(new FacturaPresentacionView()
+                    {
+                        Id = factura.Id,
+                        Serie = factura.Serie,
+                        NumeroFactura = factura.Numero,
+                        Fecha = factura.Fecha,
+                        NombreCliente = cliente.Nombre + " " + cliente.Apellido,
+                        Nit = cliente.Nit,
+                        NombreTienda = tienda.Nombre,
+                        DireccionTienda = tienda.Direccion,
+                        NombreEmpleado = empleado.Nombre,
+                        Productos = detalleFacturaViews,
+                        Monto = monto,
+
+                    });
+
+                });
+
+                return StatusCode((int)HttpStatusCode.OK, facturaPresentacionViews);
+            }
+
+            catch (Exception ex)
+            {
+
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { mensaje = ex.Message });
+
+            }
+        }
+
+
 
 
     }
