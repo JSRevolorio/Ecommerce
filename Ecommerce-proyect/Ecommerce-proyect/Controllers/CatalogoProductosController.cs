@@ -27,21 +27,30 @@ namespace Ecommerce_proyect.Controllers
         {
             try
             {
-
-
                 var catalogoP = (from producto in context.Productos
                                  join inventario in context.Inventarios on producto.Id equals inventario.IdProducto
-                                 where
-                                 inventario.Cantidad > 0 && producto.Estado == 1
-                                 select new
+                                 where inventario.Cantidad > 0 && producto.Estado == 1
+                                 group inventario by new
                                  {
                                      producto.Id,
                                      producto.Nombre,
                                      producto.Descripcion,
                                      producto.PrecioConIva,
-                                     producto.Imagen,
-                                     inventario.Cantidad,
+                                     producto.Imagen
+                                 }
+                                 into g
+                                 select new
+                                 {
+
+                                     Id = g.Key.Id,
+                                     Nombre = g.Key.Nombre,
+                                     Descripcion = g.Key.Descripcion,
+                                     PrecioConIva = g.Key.PrecioConIva,
+                                     Imagen = g.Key.Imagen,
+                                     Cantidad = g.Sum(inv => inv.Cantidad),
                                  }).ToList();
+
+              
 
 
                 List<CatalogoProductosView> catalogoProductosViews = new List<CatalogoProductosView>();

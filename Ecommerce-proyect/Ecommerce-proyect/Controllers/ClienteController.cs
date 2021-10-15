@@ -204,5 +204,58 @@ namespace Ecommerce_proyect.Controllers
 
 
 
+
+        [HttpPost]
+        [Route("login")]
+
+        public IActionResult LoginCliente([FromBody] LoginView loginView)
+        {
+            try
+            {
+                var login = new LoginView()
+                {
+                   
+                    Usuario = loginView.Usuario,
+                    Contraseña = loginView.Contraseña,                 
+                  
+                };
+
+
+                var clienteLogin = context.Clientes.Where(cliente => cliente.Usuario == login.Usuario && cliente.Contraseña == login.Contraseña).FirstOrDefault();
+
+                if (clienteLogin != null)
+                {
+                    var clienteView = new ClienteView()
+                    {
+                        Id = clienteLogin.Id,
+                        Nombre = clienteLogin.Nombre,
+                        Apellido = clienteLogin.Apellido,
+                        Telefono = clienteLogin.Telefono,
+                        Correo = clienteLogin.Correo,
+                        Direccion = clienteLogin.Direccion,
+                        Nit = clienteLogin.Nit,
+                        Usuario = clienteLogin.Usuario,
+                        Contraseña = clienteLogin.Contraseña,
+                        IdTipoCliente = clienteLogin.IdTipoCliente,
+                    };
+
+                    return StatusCode((int)HttpStatusCode.OK, clienteView);
+
+                }
+                else
+                {
+                    return StatusCode((int)HttpStatusCode.NotFound, new { mensaje = "usuario no registrado" });
+
+                }
+
+
+
+            }  catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.BadRequest, new { mensaje = ex.Message });
+
+            }
+        }
+
     }
 }
