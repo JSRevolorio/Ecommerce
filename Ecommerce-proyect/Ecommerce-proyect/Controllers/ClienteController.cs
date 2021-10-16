@@ -22,6 +22,7 @@ namespace Ecommerce_proyect.Controllers
         {
             this.context = context;
         }
+
         [HttpGet]
         public IActionResult GetCliente()
         {
@@ -59,8 +60,8 @@ namespace Ecommerce_proyect.Controllers
 
             }
         }
-        [HttpGet("{id}")]
 
+        [HttpGet("{id}")]
         public IActionResult GetByIdCliente([FromRoute] int id)
         {
             try

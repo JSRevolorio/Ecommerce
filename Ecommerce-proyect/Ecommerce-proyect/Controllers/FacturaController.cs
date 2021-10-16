@@ -103,7 +103,7 @@ namespace Ecommerce_proyect.Controllers
                         IdTienda = facturaView.IdTienda,
                         IdEmpleado = facturaView.IdEmpleado,
                         Descuento = facturaView.Descuento,
-                        IdImpuesto = 1,
+                        IdImpuesto = 2,
                         Estado = 1
                     };
 
@@ -236,9 +236,6 @@ namespace Ecommerce_proyect.Controllers
 
             }
         }
-
-
-
 
     }
 }
