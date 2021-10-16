@@ -50,6 +50,8 @@ namespace Ecommerce_proyect.Controllers
 		                           Cantidad	    = g.Sum(inv => inv.Cantidad),
                                  }).ToList();
 
+              
+
 
                 List<CatalogoProductosView> catalogoProductosViews = new List<CatalogoProductosView>();
 
