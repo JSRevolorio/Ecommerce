@@ -128,18 +128,38 @@ namespace Ecommerce_proyect.Controllers
 
                         DetalleFactura detalleFactura = new DetalleFactura()
                         {
-                            IdFactura = factura.Id,
-                            IdProducto = producto.IdProducto,
+                            IdFactura    = factura.Id,
+                            IdProducto   = producto.IdProducto,
                             PrecioConIva = precio,
-                            Cantidad = producto.Cantidad
+                            Cantidad     = producto.Cantidad
                         };
 
                         context.DetalleFacturas.Add(detalleFactura);
                         context.SaveChanges();
 
-                        var inventario = context.Inventarios.Where(inventar => inventar.IdProducto == producto.IdProducto).FirstOrDefault();
-                        inventario.Cantidad = inventario.Cantidad - producto.Cantidad;
-                        context.Inventarios.Update(inventario);
+                        var inventarios = context.Inventarios.Where(inventar => inventar.IdProducto == producto.IdProducto && inventar.Cantidad > 0).ToList();
+
+                        int cantidadPedidad = 0;
+
+        
+
+                        inventarios.ForEach(inventario => 
+                        {
+                            if (cantidadPedidad != producto.Cantidad) 
+                            {
+                                while ((inventario.Cantidad > 0) && (cantidadPedidad != producto.Cantidad))
+                                {
+                                    inventario.Cantidad = inventario.Cantidad - 1;
+
+                                    cantidadPedidad += 1;
+                                }
+
+                                context.Inventarios.Update(inventario);
+                            }
+
+                        });
+
+                        
 
                         monto += Convert.ToDecimal(precio) * producto.Cantidad;
                     });
@@ -187,10 +207,10 @@ namespace Ecommerce_proyect.Controllers
                 facturas.ToList().ForEach(factura =>
                 {
 
-                    var cliente = context.Clientes.Find(factura.IdCliente);
-                    var tienda = context.Tiendas.Find(factura.IdTienda);
-                    var empleado = context.Empleados.Find(factura.IdEmpleado);
-                    var monto = factura.FacturaPagos.Select(metodo => metodo.Monto).Sum();
+                    var cliente   = context.Clientes.Find(factura.IdCliente);
+                    var tienda    = context.Tiendas.Find(factura.IdTienda);
+                    var empleado  = context.Empleados.Find(factura.IdEmpleado);
+                    var monto     = factura.FacturaPagos.Select(metodo => metodo.Monto).Sum();
                     var productos = context.DetalleFacturas.Where(productos => productos.IdFactura == factura.Id).ToList();
 
 
@@ -200,8 +220,8 @@ namespace Ecommerce_proyect.Controllers
                     {
                         detalleFacturaViews.Add(new DetalleFacturaView()
                         {
-                            IdProducto = pro.IdProducto,
-                            Cantidad = pro.Cantidad,
+                            IdProducto   = pro.IdProducto,
+                            Cantidad     = pro.Cantidad,
                             PrecioConIva = pro.PrecioConIva,
 
                         });
@@ -210,18 +230,17 @@ namespace Ecommerce_proyect.Controllers
 
                     facturaPresentacionViews.Add(new FacturaPresentacionView()
                     {
-                        Id = factura.Id,
-                        Serie = factura.Serie,
-                        NumeroFactura = factura.Numero,
-                        Fecha = factura.Fecha,
-                        NombreCliente = cliente.Nombre + " " + cliente.Apellido,
-                        Nit = cliente.Nit,
-                        NombreTienda = tienda.Nombre,
+                        Id              = factura.Id,
+                        Serie           = factura.Serie,
+                        NumeroFactura   = factura.Numero,
+                        Fecha           = factura.Fecha,
+                        NombreCliente   = cliente.Nombre + " " + cliente.Apellido,
+                        Nit             = cliente.Nit,
+                        NombreTienda    = tienda.Nombre,
                         DireccionTienda = tienda.Direccion,
-                        NombreEmpleado = empleado.Nombre,
-                        Productos = detalleFacturaViews,
-                        Monto = monto,
-
+                        NombreEmpleado  = empleado.Nombre,
+                        Productos       = detalleFacturaViews,
+                        Monto           = monto,
                     });
 
                 });

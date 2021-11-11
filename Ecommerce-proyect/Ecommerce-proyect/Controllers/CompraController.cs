@@ -67,11 +67,11 @@ namespace Ecommerce_proyect.Controllers
                 {
                     Compra compra = new Compra()
                     {
-                        Fecha = compraView.Fecha,
+                        Fecha         = compraView.Fecha,
                         NumeroFactura = compraView.NumeroFactura,
-                        IdProveedor = compraView.IdProveedor,
-                        IdEmpleado = compraView.IdEmpleado,
-                        TotalConIva = compraView.TotalConIva,
+                        IdProveedor   = compraView.IdProveedor,
+                        IdEmpleado    = compraView.IdEmpleado,
+                        TotalConIva   = compraView.TotalConIva,
                         Estado = 1
                     };
 
@@ -97,10 +97,11 @@ namespace Ecommerce_proyect.Controllers
                         compraDetalleView.Id = detalleCompra.Id;
 
                         decimal iva = 0.12M;
+                        decimal ganancia = 1.10M;
                         var producto = context.Productos.Find(compraDetalleView.IdProducto);
                         var cantidadProductoInventario = context.Inventarios.Where(inventario => inventario.IdProducto == producto.Id).Sum(p => p.Cantidad);
 
-                        var precioTotalIva = ((detalleCompra.PrecioUnidadConIva * detalleCompra.Cantidad) + (producto.PrecioConIva * cantidadProductoInventario)) / (cantidadProductoInventario + detalleCompra.Cantidad);
+                        var precioTotalIva = (((detalleCompra.PrecioUnidadConIva * ganancia) * detalleCompra.Cantidad) + (producto.PrecioConIva * cantidadProductoInventario)) / (cantidadProductoInventario + detalleCompra.Cantidad);
                         var precioTotalSinIva = (precioTotalIva) - (precioTotalIva * iva);
 
 
@@ -116,8 +117,8 @@ namespace Ecommerce_proyect.Controllers
                         context.SaveChanges();
 
 
-                        producto.PrecioConIva = precioTotalIva;
-                        producto.PrecioSinIva = precioTotalSinIva;
+                        producto.PrecioConIva = Math.Round(precioTotalIva,0);
+                        producto.PrecioSinIva = Math.Round(precioTotalSinIva,0);
 
                         context.Productos.Update(producto);
                         context.SaveChanges();
